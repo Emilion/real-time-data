@@ -7,9 +7,9 @@ export class SelectionActivityChartService {
   private chartLabels: string[];
   constructor() {
     this.dataSet = [
-      {data: [], label: 'totalCallsAdded'},
-      {data: [], label: 'totalCallsRemoved'},
-      {data: [], label: 'segmentSize', type: 'line'},
+      {data: [], label: 'totalCallsAdded', yAxisID: 'totalCallsAdded'},
+      {data: [], label: 'totalCallsRemoved', yAxisID: 'totalCallsRemoved'},
+      {data: [], label: 'segmentSize', type: 'line', yAxisID: 'segmentSize'},
       ];
     this.chartLabels = [];
   }

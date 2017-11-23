@@ -1,3 +1,6 @@
+const MAX_RANDOM_TIME = 2000;
+const DAY_CHANGES = 10;
+
 var base_structure = [
     {
         key: {
@@ -21,15 +24,16 @@ var base_structure = [
     }
 ];
 
+
 /**
  *
  * @param selections
  */
 function setRandomCalls(selections) {
     var lastSelection = selections[(selections.length - 1)];
-    lastSelection.totalCallsAdded = lastSelection.totalCallsAdded + randomNumber(-(lastSelection.totalCallsAdded), lastSelection.totalCallsAdded);
-    lastSelection.totalCallsRemoved = lastSelection.totalCallsRemoved + randomNumber(-(lastSelection.totalCallsRemoved), lastSelection.totalCallsRemoved);
-    lastSelection.segmentSize = selections[selections.length - 2].segmentSize + (lastSelection.segmentSize - lastSelection.segmentSize);
+    lastSelection.totalCallsAdded = lastSelection.totalCallsAdded + randomNumber(-(lastSelection.totalCallsAdded/3), lastSelection.totalCallsAdded/3);
+    lastSelection.totalCallsRemoved = lastSelection.totalCallsRemoved + randomNumber(-(lastSelection.totalCallsRemoved/3), lastSelection.totalCallsRemoved/3);
+    lastSelection.segmentSize = selections[selections.length - 2].segmentSize + (lastSelection.totalCallsAdded - lastSelection.totalCallsRemoved);
 }
 
 /**
@@ -67,7 +71,8 @@ function randomNumber(min, max) {
     if (min === 0 || max === 0) {
         min = max = 10;
     }
-    return Math.round(Math.random() * (max - min) + min);
+    var randomNumber = Math.round(Math.random() * (max - min) + min);
+    return randomNumber > 200 || randomNumber < -200 ? randomNumber/3 : randomNumber;
 }
 
 /**
@@ -78,7 +83,7 @@ function randomNumber(min, max) {
 module.exports = function (getAll, callback) {
     var count = 1,
         selections = base_structure,
-        randomTime = 200,
+        randomTime = 200, // initial delay. It would be updated in every next response
         timer;
 
     if (getAll === true) {
@@ -88,10 +93,10 @@ module.exports = function (getAll, callback) {
      *
      */
     var timerCallback = function () {
-        randomTime = Math.round(Math.random() * 1000);
+        randomTime = Math.round(Math.random() * MAX_RANDOM_TIME);
         count++;
         // should be configurable
-        if (count > 10) {
+        if (count > DAY_CHANGES) {
             count = 1;
             // set new record (day) to selection
             setNewDay(selections);

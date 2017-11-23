@@ -14,30 +14,79 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
   public chartOptions: any;
   public chartDatasets: any;
   public chartLabels: any;
+  public chartType: string = 'bar';
+  public chartLegend: boolean = true;
 
-  private limitedChartData: any;
+  private chartData: any;
 
+  /**
+   * Constructor.
+   */
   constructor(private selectionChartService: SelectionActivityChartService) {
   }
 
+  /**
+   * Init chart options
+   */
   private initChartOptions() {
     this.chartOptions = {
-      scaleShowVerticalLines: false,
-      responsive: false,
-      barThickness: 10,
+      scaleShowVerticalLines: true,
+      responsive: true,
       scales: {
         xAxes: [ {
+          distribution: 'series',
           stacked: true,
-          barThickness: 40,
+          barThickness: 20,
 
           ticks: {
             beginAtZero: true,
-            min: '2008'
+            max: 30
           }
-        } ],
-        yAxes: [ {
-          stacked: true
-        } ]
+        }
+        ],
+        yAxes: [
+          {
+            type: 'linear',
+            position: 'left',
+            id: 'totalCallsAdded',
+            ticks: {
+              beginAtZero: true,
+              suggestedMax: 200,
+              suggestedMin: -200
+            },
+            gridLines: {
+              drawOnChartArea: true, // only want the grid lines for one axis to show up
+            }
+          },
+          {
+            type: 'linear',
+            position: 'right',
+            id: 'totalCallsRemoved',
+            ticks: {
+              reverse: true,
+              beginAtZero: true,
+              suggestedMax: 200,
+              suggestedMin: -200
+            },
+            gridLines: {
+              drawOnChartArea: true
+            }
+          },
+          {
+            type: 'linear',
+            display: false,
+            position: 'right',
+            id: 'segmentSize',
+            ticks: {
+              beginAtZero: true,
+              suggestedMax: 1000,
+              suggestedMin: -1000
+            },
+            gridLines: {
+              drawOnChartArea: true
+            }
+          }
+        ]
       },
       legend: {
         display: true,
@@ -49,68 +98,49 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
         duration: 0, // general animation time
       },
       hover: {
-        // animationDuration: 0, // duration of animations when hovering an item
       },
       responsiveAnimationDuration: 0
 
     }
   }
 
-
+  /**
+   * OnInit angular LifeCycleHook
+   */
   ngOnInit() {
     this.initChartOptions();
-    this.chartDatasets = [{data: [], labels: []}];
-    this.chartLabels = [];
+    this.chartDatasets = this.selectionChartService.datasets;
+    this.chartLabels = this.selectionChartService.labels;
   }
 
   /**
-   * On Changes LifeCycleHook
+   * OnChanges LifeCycleHook
    *
    * @param {SimpleChanges} changes
    */
   ngOnChanges(changes: SimpleChanges): void {
 
     if (changes[ 'data' ] && !!changes[ 'data' ].currentValue) {
-      // Make a limit of the data in terms of the requirement
       let _change = changes[ 'data' ];
       let config;
-      if(_change.currentValue.length > Constants.chartConfig.limitDays) {
-          let limitedData = _change.currentValue.splice(0, (this.data.length - Constants.chartConfig.limitDays));
-        this.limitedChartData = [...limitedData];
-      } else {
-        this.limitedChartData = [..._change.currentValue];
-      }
 
-      let lastSelection = this.limitedChartData[this.limitedChartData.length - 1];
+        this.chartData = [ ..._change.currentValue ];
 
+      let lastSelection = this.chartData[ this.chartData.length - 1 ];
       if (!_change.previousValue || _change.currentValue.length > _change.previousValue.length) {
         config = this.selectionChartService.mapToDataSetModel(lastSelection, false);
       } else {
         config = this.selectionChartService.mapToDataSetModel(lastSelection, true);
       }
-      console.log(config);
       this.chartDatasets = config.datasets;
-      this.chartLabels = [...config.labels];
+      this.chartLabels = [ ...config.labels ];
 
     }
   }
 
-
   /**
-   * CHART
-   * @type {{scaleShowVerticalLines: boolean; responsive: boolean}}
-   */
-
-  public barChartLabels: string[] = [ '2006', '2007', '2008', '2009', '2010', '2011', '2012' ];
-  public barChartType: string = 'bar';
-  public barChartLegend: boolean = true;
-
-  public barChartData: any[] = [
-    {data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Series A'},
-    {data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Series B', type: 'line'}
-  ];
-
-  // events
+   * events
+    */
   public chartClicked(e: any): void {
     console.log(e);
   }
