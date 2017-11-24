@@ -10,6 +10,7 @@ node_modules
 
 # IDEs and editors
 /client/.idea
+.idea
 .project
 .classpath
 .c9/
