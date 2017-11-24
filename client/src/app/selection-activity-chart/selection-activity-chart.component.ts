@@ -39,7 +39,7 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
         xAxes: [ {
           distribution: 'series',
           stacked: true,
-          barThickness: 20,
+          barThickness: 15,
 
           ticks: {
             beginAtZero: true
