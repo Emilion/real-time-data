@@ -5,8 +5,16 @@ Real time data demo app was required by Relay42.
 ## Description
 
 For more info about [Client](https://github.com/Emilion/real-time-data/tree/master/client)
+
 For more info about [Server](https://github.com/Emilion/real-time-data/tree/master/server)
 
+## Specifics
+
+* The server handle one client connection.
+* Server needs to be started before the Client, otherwise you`ll need to refresh the client because
+the client establish the connection on initial load.
+
+* Once web-socket is opened it could be broken by refreshing the client. (no error handling on server side)
 # Installation Guide
 
 Installation is separated on 2 parts - Client and Server
