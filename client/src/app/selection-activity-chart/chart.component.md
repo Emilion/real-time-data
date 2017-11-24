@@ -1,3 +1,1 @@
-### Configs
 
-* limitDays: 30 
