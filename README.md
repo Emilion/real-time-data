@@ -15,6 +15,7 @@ For more info about [Server](https://github.com/Emilion/real-time-data/tree/mast
 the client establish the connection on initial load.
 
 * Once web-socket is opened it could be broken by refreshing the client. (no error handling on server side)
+
 # Installation Guide
 
 Installation is separated on 2 parts - Client and Server
@@ -41,3 +42,7 @@ Installation is separated on 2 parts - Client and Server
 #### Running unit tests
 
 * Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Known issues
+
+Chart.js has issue with tick rendering on chart data update. They work on this issue.
