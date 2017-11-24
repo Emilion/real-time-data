@@ -83,12 +83,12 @@ function randomNumber(min, max) {
  */
 module.exports = function (getAll, callback) {
     var count = 1,
-        selections = base_structure,
+        selectionData = base_structure,
         randomTime = 200, // initial delay. It would be updated in every next response
         timer;
 
     if (getAll === true) {
-        return callback(selections);
+        return callback(selectionData);
     }
     /**
      *
@@ -100,13 +100,13 @@ module.exports = function (getAll, callback) {
         if (count > DAY_CHANGES) {
             count = 1;
             // set new record (day) to selection
-            setNewDay(selections);
+            setNewDay(selectionData);
         } else {
             // update last record
-            setRandomCalls(selections);
+            setRandomCalls(selectionData);
         }
         // execute callback
-        var select = selections[selections.length - 1];
+        var select = selectionData[selectionData.length - 1];
         console.log(JSON.stringify(select));
         callback(select);
 
