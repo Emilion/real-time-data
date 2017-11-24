@@ -14,7 +14,7 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
   public chartDatasets: any;
   public chartLabels: any;
   public chartType: string = 'bar';
-  public chartLegend: boolean = true;
+  public chartLegend: boolean = false;
   public chartColors:Array<any>;
 
   private currentDays: any;
