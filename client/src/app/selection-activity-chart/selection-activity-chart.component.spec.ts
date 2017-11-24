@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectionActivityChartComponent } from './selection-activity-chart.component';
+import {ChartsModule} from 'ng2-charts';
+import {CommonModule} from '@angular/common';
+import {SelectionActivityChartService} from './selection-activity-chart.service';
 
 describe('SelectionActivityChartComponent', () => {
   let component: SelectionActivityChartComponent;
@@ -8,7 +11,10 @@ describe('SelectionActivityChartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectionActivityChartComponent ]
+      declarations: [ SelectionActivityChartComponent ],
+      imports: [CommonModule,
+        ChartsModule],
+      providers: [SelectionActivityChartService]
     })
     .compileComponents();
   }));
@@ -22,4 +28,9 @@ describe('SelectionActivityChartComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it(`should should be bar chart`, async(() => {
+    const fixture = TestBed.createComponent(SelectionActivityChartComponent);
+    const component = fixture.debugElement.componentInstance;
+    expect(component.chartType).toEqual('bar');
+  }));
 });

@@ -12,4 +12,14 @@ describe('SectionChartService', () => {
   it('should be created', inject([SelectionActivityChartService], (service: SelectionActivityChartService) => {
     expect(service).toBeTruthy();
   }));
+  it('should add labels', inject([SelectionActivityChartService], (service: SelectionActivityChartService) => {
+    service.addLabels('label');
+    expect(service.labels.length).toBeGreaterThan(0);
+  }));
+
+  it('should label be string', inject([SelectionActivityChartService], (service: SelectionActivityChartService) => {
+    service.addLabels('label');
+    expect(typeof service.labels[0]).toBe('string');
+  }));
+
 });
