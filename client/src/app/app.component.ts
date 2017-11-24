@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { SelectionActivityService } from "./selection-activity.service";
-import { Observable } from "rxjs/Observable";
+import {Component} from '@angular/core';
+import {SelectionActivityService} from './selection-activity.service';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +9,10 @@ import { Observable } from "rxjs/Observable";
 })
 export class AppComponent {
 
-  private selections: any[];
-  private watcherObserver: Observable<any[]>;
-  private watcher: Observable<any>;
+  selections: any[];
+  watcherObserver: Observable<any[]>;
+  watcher: Observable<any>;
+
   constructor(private selectionActivityService: SelectionActivityService) {
 
     // Creates watcher

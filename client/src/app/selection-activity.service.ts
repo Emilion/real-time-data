@@ -1,6 +1,9 @@
-import { Injectable } from "@angular/core";
-import { WebsocketService } from "./websocket.service";
-import { Subscriber, Observable, Subject } from "rxjs/Rx";
+import { Injectable } from '@angular/core';
+import { WebsocketService } from './websocket.service';
+import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
+import {Subscriber} from "rxjs/Subscriber";
+import "rxjs/add/operator/map";
 
 @Injectable()
 /**
@@ -23,7 +26,7 @@ export class SelectionActivityService {
    * @returns {Observable<any>}
    */
   watcher(): Observable<any> {
-    let subscriber = Subscriber.create(() => {
+    const subscriber = Subscriber.create(() => {
       this.wss.send(JSON.stringify({message: 'start'}));
     });
     return this.wss.createObservableSocket('ws://localhost:3000', subscriber).map(res => JSON.parse(res));
@@ -42,22 +45,22 @@ export class SelectionActivityService {
    */
   getSelectionResponse(watcher: Observable<any>): Observable<any[]> {
     // Observer to be returned
-    let observer = new Subject<any>();
+    const observer = new Subject<any>();
 
     // Subscribing the watcher
     watcher.subscribe((res) => {
 
       // check if the selection appears. This is necessary due to first event respond 2+ records.
-      if(this.selections.length === 0) {
+      if (this.selections.length === 0) {
         // create new object of the response (immutable)
         this.selections = [...res];
 
         // Update last record if it has the same segment id as the responded one
-      } else if(this.selections[this.selections.length - 1].key.segmentNumber === res.key.segmentNumber) {
+      } else if (this.selections[this.selections.length - 1].key.segmentNumber === res.key.segmentNumber) {
 
         //
         let lastSelection = {...this.selections[this.selections.length - 1]};
-        let response = {...res};
+        const response = {...res};
         lastSelection = Object.assign(lastSelection, response);
 
         this.selections[this.selections.length - 1] = lastSelection;
@@ -78,6 +81,6 @@ export class SelectionActivityService {
       observer.complete();
       });
 
-    return observer
+    return observer;
   }
 }

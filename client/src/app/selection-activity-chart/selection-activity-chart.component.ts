@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SelectionActivityChartService } from "./selection-activity-chart.service";
-import { Constants } from "../constants";
 
 @Component({
   selector: 'app-selection-activity-chart',
@@ -17,7 +16,7 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
   public chartType: string = 'bar';
   public chartLegend: boolean = true;
 
-  private chartData: any;
+  private currentSelections: any;
 
   /**
    * Constructor.
@@ -39,8 +38,7 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
           barThickness: 20,
 
           ticks: {
-            beginAtZero: true,
-            max: 30
+            beginAtZero: true
           }
         }
         ],
@@ -101,7 +99,7 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
       },
       responsiveAnimationDuration: 0
 
-    }
+    };
   }
 
   /**
@@ -121,20 +119,35 @@ export class SelectionActivityChartComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
 
     if (changes[ 'data' ] && !!changes[ 'data' ].currentValue) {
+
       let _change = changes[ 'data' ];
-      let config;
+      let modifiedChartDataset;
 
-        this.chartData = [ ..._change.currentValue ];
+      // create a new instance of the server data
+        this.currentSelections = [ ..._change.currentValue ];
 
-      let lastSelection = this.chartData[ this.chartData.length - 1 ];
-      if (!_change.previousValue || _change.currentValue.length > _change.previousValue.length) {
-        config = this.selectionChartService.mapToDataSetModel(lastSelection, false);
-      } else {
-        config = this.selectionChartService.mapToDataSetModel(lastSelection, true);
+        // get the last element
+      let lastSelection = this.currentSelections[ this.currentSelections.length - 1 ];
+
+      // check if it first change - there is a method isFirstChange() but most of the times returns true twice or triple
+      // so we need to ensure that we really have our first change
+      if (!_change.previousValue && !!_change.currentValue) {
+        // Init the dataset and assign both DataSet and Labels to current chart config properties
+        this.selectionChartService.initDataset(this.currentSelections);
+        this.chartDatasets = this.selectionChartService.datasets;
+        this.chartLabels = [ ...this.selectionChartService.labels ];
+        return;
       }
-      this.chartDatasets = config.datasets;
-      this.chartLabels = [ ...config.labels ];
 
+      // Checks when we need to update or add new tick.
+      if (_change.currentValue.length > _change.previousValue.length) {
+        modifiedChartDataset = this.selectionChartService.addTick(lastSelection);
+      } else {
+        modifiedChartDataset = this.selectionChartService.updateLastTick(lastSelection);
+      }
+      // assign dataset and labels
+      this.chartDatasets = modifiedChartDataset;
+      this.chartLabels = [ ...this.selectionChartService.labels ];
     }
   }
 
