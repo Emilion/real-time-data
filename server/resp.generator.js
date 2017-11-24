@@ -4,23 +4,23 @@ const DAY_CHANGES = 10;
 var base_structure = [
     {
         key: {
-            segmentNumber: 188, // internal segment id
+            segmentNumber: 1, // internal segment id
             dayTimestamp: 1496181600000, // timestamp normalised to midnight
             timestamp: 1496181600000 // actual data-point timestamp
         },
         totalCallsAdded: 31,
         totalCallsRemoved: 28,
-        segmentSize: 17
+        segmentSize: 3
     },
     {
         key: {
-            segmentNumber: 189, // internal segment id
+            segmentNumber: 2, // internal segment id
             dayTimestamp: 1496268000000, // timestamp normalised to midnight
             timestamp: 1496268000000 // actual data-point timestamp
         },
         totalCallsAdded: 31,
         totalCallsRemoved: 28,
-        segmentSize: 17
+        segmentSize: 6
     }
 ];
 
@@ -30,10 +30,10 @@ var base_structure = [
  * @param selections
  */
 function setRandomCalls(selections) {
-    var lastSelection = selections[(selections.length - 1)];
-    lastSelection.totalCallsAdded = lastSelection.totalCallsAdded + randomNumber(-(lastSelection.totalCallsAdded/3), lastSelection.totalCallsAdded/3);
-    lastSelection.totalCallsRemoved = lastSelection.totalCallsRemoved + randomNumber(-(lastSelection.totalCallsRemoved/3), lastSelection.totalCallsRemoved/3);
-    lastSelection.segmentSize = selections[selections.length - 2].segmentSize + (lastSelection.totalCallsAdded - lastSelection.totalCallsRemoved);
+    var lastDay = selections[(selections.length - 1)];
+    lastDay.totalCallsAdded = lastDay.totalCallsAdded + randomNumber(1, 10);
+    lastDay.totalCallsRemoved = lastDay.totalCallsRemoved + randomNumber(1, 10);
+    lastDay.segmentSize = selections[selections.length - 2].segmentSize + (lastDay.totalCallsAdded - lastDay.totalCallsRemoved);
 }
 
 /**
@@ -42,12 +42,13 @@ function setRandomCalls(selections) {
  * @returns {*}
  */
 function setNewDay(selections) {
-
-    var newSelection = Object.assign({}, selections[selections.length - 1]);
-    newSelection.key.dayTimestamp = addDays(newSelection.key.dayTimestamp, 1).getTime();
-    newSelection.key.timestamp = addDays(newSelection.key.timestamp, 1).getTime();
-    newSelection.key.segmentNumber++;
-    selections.push(newSelection);
+    var newDay = Object.assign({}, selections[selections.length - 1]);
+    newDay.totalCallsAdded = 0;
+    newDay.totalCallsRemoved = 0;
+    newDay.key.dayTimestamp = addDays(newDay.key.dayTimestamp, 1).getTime();
+    newDay.key.timestamp = addDays(newDay.key.timestamp, 1).getTime();
+    // newDay.key.segmentNumber++;
+    selections.push(newDay);
 }
 
 /**

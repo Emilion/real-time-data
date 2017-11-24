@@ -16,6 +16,10 @@ the client establish the connection on initial load.
 
 * Once web-socket is opened it could be broken by refreshing the client. (no error handling on server side)
 
+## Features
+
+* Chart axis scales could be dynamically changed regarding current ticks values.
+
 # Installation Guide
 
 Installation is separated on 2 parts - Client and Server

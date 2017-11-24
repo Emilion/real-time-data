@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/Observable';
 })
 export class AppComponent {
 
-  selections: any[];
+  selection: any[];
   watcherObserver: Observable<any[]>;
   watcher: Observable<any>;
 
@@ -19,8 +19,8 @@ export class AppComponent {
     this.watcher = this.selectionActivityService.watcher();
     this.watcherObserver = this.selectionActivityService.getSelectionResponse(this.watcher);
     // updating the reference of selection Array.
-    this.watcherObserver.subscribe((_selections) => {
-      this.selections = _selections;
+    this.watcherObserver.subscribe((data) => {
+      this.selection = data;
     });
 
   }

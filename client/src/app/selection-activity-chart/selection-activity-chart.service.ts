@@ -9,9 +9,9 @@ export class SelectionActivityChartService {
 
   constructor() {
     this.dataSet = [
-      {data: [], label: 'totalCallsAdded', yAxisID: 'totalCallsAdded'},
-      {data: [], label: 'totalCallsRemoved', yAxisID: 'totalCallsRemoved'},
       {data: [], label: 'segmentSize', type: 'line', yAxisID: 'segmentSize'},
+      {data: [], label: 'totalCallsAdded', yAxisID: 'totalCallsAdded'},
+      {data: [], label: 'totalCallsRemoved', yAxisID: 'totalCallsRemoved'}
     ];
     this.chartLabels = [];
   }
@@ -71,7 +71,6 @@ export class SelectionActivityChartService {
     this.dataSet.forEach((val, index) => {
       if (val.data.length > this.maxTicks) {
         val.data.splice(0, (val.data.length - this.maxTicks));
-        console.log(val.data);
         if (index === this.dataSet.length - 1) {
           this.chartLabels.splice(0, (this.chartLabels.length - this.maxTicks))
         }

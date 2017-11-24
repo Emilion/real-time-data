@@ -11,13 +11,13 @@ import "rxjs/add/operator/map";
  */
 export class SelectionActivityService {
 
-  private selections: any;
+  private selection: any;
   /**
    * Constructor.
    * @param {WebsocketService} wss
    */
   constructor(private wss: WebsocketService) {
-    this.selections = [];
+    this.selection = [];
   }
 
   /**
@@ -51,26 +51,26 @@ export class SelectionActivityService {
     watcher.subscribe((res) => {
 
       // check if the selection appears. This is necessary due to first event respond 2+ records.
-      if (this.selections.length === 0) {
+      if (this.selection.length === 0) {
         // create new object of the response (immutable)
-        this.selections = [...res];
+        this.selection = [...res];
 
         // Update last record if it has the same segment id as the responded one
-      } else if (this.selections[this.selections.length - 1].key.segmentNumber === res.key.segmentNumber) {
+      } else if (this.selection[this.selection.length - 1].key.dayTimestamp === res.key.dayTimestamp) {
 
         //
-        let lastSelection = {...this.selections[this.selections.length - 1]};
+        let lastDay = {...this.selection[this.selection.length - 1]};
         const response = {...res};
-        lastSelection = Object.assign(lastSelection, response);
+        lastDay = Object.assign(lastDay, response);
 
-        this.selections[this.selections.length - 1] = lastSelection;
+        this.selection[this.selection.length - 1] = lastDay;
 
       } else {
 
-        this.selections.push({...res});
+        this.selection.push({...res});
       }
 
-      observer.next([...this.selections]);
+      observer.next([...this.selection]);
     },
       // error handler
       onerror => {

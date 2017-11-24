@@ -6,7 +6,7 @@ THe server is created to support and provides basic functionality to
 real-time-data client application.
 It use webSocket and random generated data pursuant to the given data model.
 
-The values are unreal.
+`The values are random generated.`
 
 ## Specifics
 
